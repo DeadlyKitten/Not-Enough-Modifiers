@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace More_Modifiers
@@ -14,75 +10,63 @@ namespace More_Modifiers
     /// </summary>
     public class More_ModifiersController : MonoBehaviour
     {
-        public static More_ModifiersController instance { get; private set; }
+        public static More_ModifiersController Instance { get; private set; }
 
-        #region Monobehaviour Messages
-        /// <summary>
-        /// Only ever called once, mainly used to initialize variables.
-        /// </summary>
+        internal BeatmapObjectManager beatmapObjectManager;
+
         private void Awake()
         {
-            // For this particular MonoBehaviour, we only want one instance to exist at any time, so store a reference to it in a static property
-            //   and destroy any that are created while one already exists.
-            if (instance != null)
+            if (Instance != null)
             {
                 Logger.log?.Warn($"Instance of {this.GetType().Name} already exists, destroying.");
                 GameObject.DestroyImmediate(this);
                 return;
             }
-            GameObject.DontDestroyOnLoad(this); // Don't destroy this object on scene changes
-            instance = this;
-            Logger.log?.Debug($"{name}: Awake()");
+            GameObject.DontDestroyOnLoad(this);
+            Instance = this;
         }
-        /// <summary>
-        /// Only ever called once on the first frame the script is Enabled. Start is called after any other script's Awake() and before Update().
-        /// </summary>
+
         private void Start()
         {
-
+            BS_Utils.Utilities.BSEvents.gameSceneLoaded += GameSceneLoaded;
+            BS_Utils.Utilities.BSEvents.menuSceneActive += GameSceneLeft;
         }
 
-        /// <summary>
-        /// Called every frame if the script is enabled.
-        /// </summary>
-        private void Update()
+        void OnNoteSpawned(NoteController noteController)
         {
-
+            if (noteController.noteData.noteType == NoteType.Bomb) return;
+            Controllers.NoteModifierController.Init(noteController, new Configuration.NoteModifierSettings());
         }
 
-        /// <summary>
-        /// Called every frame after every other enabled script's Update().
-        /// </summary>
-        private void LateUpdate()
+        private void OnDestroy() => Instance = null;
+
+        void GameSceneLoaded()
         {
-
+            if (Configuration.Config.instance.ModEnabled)
+            {
+                Logger.log.Debug("Mod enabled; disabling score submission");
+                BS_Utils.Gameplay.ScoreSubmission.DisableSubmission("More Modifiers");
+            }
+            StartCoroutine(Initialize());
         }
 
-        /// <summary>
-        /// Called when the script becomes enabled and active
-        /// </summary>
-        private void OnEnable()
+        void GameSceneLeft()
         {
+            if (beatmapObjectManager)
+            {
+                beatmapObjectManager.noteWasSpawnedEvent -= OnNoteSpawned;
+                beatmapObjectManager = null;
+            }
 
+            HarmonyPatches.GameNoteController_HandleCut.sabers = null;
+            HarmonyPatches.GameNoteController_HandleCut.spawner = null;
         }
 
-        /// <summary>
-        /// Called when the script becomes disabled or when it is being destroyed.
-        /// </summary>
-        private void OnDisable()
+        IEnumerator Initialize()
         {
+            yield return new WaitUntil(() => beatmapObjectManager = Resources.FindObjectsOfTypeAll<BeatmapObjectManager>().FirstOrDefault());
 
+            beatmapObjectManager.noteWasSpawnedEvent += OnNoteSpawned;
         }
-
-        /// <summary>
-        /// Called when the script is being destroyed.
-        /// </summary>
-        private void OnDestroy()
-        {
-            Logger.log?.Debug($"{name}: OnDestroy()");
-            instance = null; // This MonoBehaviour is being destroyed, so set the static instance property to null.
-
-        }
-        #endregion
     }
 }

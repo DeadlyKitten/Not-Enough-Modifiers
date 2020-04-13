@@ -1,0 +1,28 @@
+﻿<horizontal pad-left="5" pad-right="5" spacing="2">
+  <modifier-container>
+    <checkbox-setting value="appearing-arrows" text="Appearing Arrows" apply-on-change="true" />
+    <checkbox-setting value="appearing-colors" text="Appearing Colors" apply-on-change="true" />
+    <checkbox-setting value="disappearing-colors" text="Disappearing Colors" apply-on-change="true" />
+    <checkbox-setting value="shrinking-blocks" text="Shrinking Blocks" apply-on-change="true" />
+  </modifier-container>
+  <modifier-container>
+    <checkbox-setting value="warp-notes" text="Warp Notes" apply-on-change="true" />
+    <checkbox-setting value="hidden-blocks" text="Hidden Blocks" apply-on-change="true" />
+    <checkbox-setting value="one-color" text="One Color" on-change="set-one-color" apply-on-change="true" />
+    <modal show-event="show-colors" hide-event="confirm" move-to-center="true" click-off-closes="true" size-delta-x="85" size-delta-y="60" >
+      <vertical child-control-height='false'>
+        <horizontal bg='panel-top' pad-left='15' pad-right='15' horizontal-fit='PreferredSize'>
+          <text text='One Color Mode' align='Center' font-size='8'/>
+        </horizontal>
+      </vertical>
+      <vertical vertical-fit="PreferredSize" horizontal-fit="PreferredSize" pref-width="70" pad-top="10" >
+        <modifier-container spacing="5">
+          <list-setting text="Color" value="one-color-choice" choices="list-colors" formatter="format-color" apply-on-change="true"/>
+          <button click-event="confirm" text="Confirm"/>
+        </modifier-container>
+      </vertical>
+    </modal>
+    <checkbox-setting value="mayhem" text="MAYHEM" hover-hint="Randomly activate all modifiers (except one color)" apply-on-change="true" />
+  </modifier-container>
+</horizontal>
+  

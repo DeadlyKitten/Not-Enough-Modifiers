@@ -1,13 +1,14 @@
 ﻿{
   "$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
-  "id": "More_Modifiers",
+  "id": "More Modifiers",
   "name": "More Modifiers",
-  "author": "",
-  "version": "0.0.1",
-  "description": "",
-  "gameVersion": "1.6.2",
+  "author": "Steven 🎀",
+  "version": "0.0.1-alpha",
+  "description": "A Beat Saber mod that adds various modifiers for interesting gameplay.",
+  "gameVersion": "1.9.0",
   "dependsOn": {
-
+    "BS Utils": "^1.4.6",
+    "BeatSaberMarkupLanguage": "^1.2.2"
   },
   "features": []
 }

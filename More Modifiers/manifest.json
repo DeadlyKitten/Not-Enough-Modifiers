@@ -3,7 +3,7 @@
   "id": "More Modifiers",
   "name": "More Modifiers",
   "author": "Steven 🎀",
-  "version": "0.0.1-alpha",
+  "version": "0.0.2-alpha",
   "description": "A Beat Saber mod that adds various modifiers for interesting gameplay.",
   "gameVersion": "1.9.0",
   "dependsOn": {

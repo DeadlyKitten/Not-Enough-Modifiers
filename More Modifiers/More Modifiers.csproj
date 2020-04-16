@@ -104,9 +104,11 @@
     <Compile Include="Configuration\NoteModiferSettings.cs" />
     <Compile Include="Controllers\NoteModifierController.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="HarmonyPatches\BeatmapObjectSpawnController_SpawnNote.cs" />
     <Compile Include="HarmonyPatches\ColorManager_ColorForType.cs" />
     <Compile Include="HarmonyPatches\GameNoteController_HandleCut.cs" />
     <Compile Include="HarmonyPatches\NoteBasicCutInfo_GetBasicCutInfo.cs" />
+    <Compile Include="HarmonyPatches\NoteCutSoundEffectManager_BeatmapObjectCallback.cs" />
     <Compile Include="Modifiers\Notes\AppearingArrowsController.cs" />
     <Compile Include="Modifiers\Notes\AppearingColorsController.cs" />
     <Compile Include="Modifiers\Notes\DisappearingColorsController.cs" />

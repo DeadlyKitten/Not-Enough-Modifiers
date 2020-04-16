@@ -18,6 +18,7 @@
       <vertical vertical-fit="PreferredSize" horizontal-fit="PreferredSize" pref-width="70" pad-top="10" >
         <modifier-container spacing="5">
           <list-setting text="Color" value="one-color-choice" choices="list-colors" formatter="format-color" apply-on-change="true"/>
+          <list-setting text="Disable Notes" value="one-color-hide" choices="list-notes" apply-on-change="true"/>
           <button click-event="confirm" text="Confirm"/>
         </modifier-container>
       </vertical>

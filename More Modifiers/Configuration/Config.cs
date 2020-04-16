@@ -61,6 +61,14 @@ namespace More_Modifiers.Configuration
                 original = typeof(ColorManager).GetMethod("ColorForNoteType");
                 Plugin.HarmonyInstance.Patch(original, prefix: new HarmonyMethod(patch));
 
+                original = typeof(BeatmapObjectSpawnController).GetMethod("SpawnNote");
+                patch = typeof(HarmonyPatches.BeatmapObjectSpawnController_SpawnNote).GetMethod("Prefix");
+                Plugin.HarmonyInstance.Patch(original, prefix: new HarmonyMethod(patch));
+
+                original = typeof(NoteCutSoundEffectManager).GetMethod("BeatmapObjectCallback");
+                patch = typeof(HarmonyPatches.NoteCutSoundEffectManager_BeatmapObjectCallback).GetMethod("Prefix");
+                Plugin.HarmonyInstance.Patch(original, prefix: new HarmonyMethod(patch));
+
                 parserParams.EmitEvent("show-colors");
             }
             else
@@ -82,6 +90,14 @@ namespace More_Modifiers.Configuration
                     original = typeof(ColorManager).GetMethod("ColorForNoteType");
                     Plugin.HarmonyInstance.Unpatch(original, patch);
 
+                    original = typeof(BeatmapObjectSpawnController).GetMethod("SpawnNote");
+                    patch = typeof(HarmonyPatches.BeatmapObjectSpawnController_SpawnNote).GetMethod("Prefix");
+                    Plugin.HarmonyInstance.Unpatch(original, patch);
+
+                    original = typeof(NoteCutSoundEffectManager).GetMethod("BeatmapObjectCallback");
+                    patch = typeof(HarmonyPatches.NoteCutSoundEffectManager_BeatmapObjectCallback).GetMethod("Prefix");
+                    Plugin.HarmonyInstance.Unpatch(original, patch);
+
                     HarmonyPatches.GameNoteController_HandleCut.sabers = null;
                     HarmonyPatches.GameNoteController_HandleCut.spawner = null;
                 }
@@ -94,11 +110,17 @@ namespace More_Modifiers.Configuration
         [UIValue("one-color-choice")]
         public OneColor ColorToUse;
 
+        [UIValue("one-color-hide")]
+        public HideNoteType ColorNoteToHide;
+
         [UIValue("list-colors")]
-        public List<object> presetNJS = Enumerable.Range(0, Enum.GetNames(typeof(OneColor)).Count()).Select(x => (OneColor)x).Cast<object>().ToList();
+        public List<object> presetColors = Enumerable.Range(0, Enum.GetNames(typeof(OneColor)).Count()).Select(x => (OneColor)x).Cast<object>().ToList();
+
+        [UIValue("list-notes")]
+        public List<object> presetNotes = Enumerable.Range(0, Enum.GetNames(typeof(HideNoteType)).Count()).Select(x => (HideNoteType)x).Cast<object>().ToList();
 
         [UIAction("format-color")]
-        public string OnFormatNJS(OneColor value) => value.ToString().Replace('_', ' ');
+        public string OnFormatSaberColor(OneColor value) => value.ToString().Replace('_', ' ');
     }
 
     public enum OneColor
@@ -106,5 +128,12 @@ namespace More_Modifiers.Configuration
         Right_Saber,
         Left_Saber,
         Combine
+    }
+
+    public enum HideNoteType
+    {
+        None,
+        Left,
+        Right
     }
 }
